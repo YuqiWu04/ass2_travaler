@@ -1,4 +1,4 @@
-// 📄 data/AppContainer.kt
+
 package com.example.ass2_travaler.data
 
 import com.example.ass2_travaler.network.CityApiService
@@ -13,24 +13,18 @@ interface AppContainer {
 class DefaultAppContainer : AppContainer {
     private val baseUrl = "https://yuqiwu04.github.io/my_api_repo/"
 
-    /**
-     * 使用 Kotlin 序列化构建 Retrofit 实例
-     */
+    // Building Retrofit Instances Serially with Kotlin
     private val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
-        .addConverterFactory(GsonConverterFactory.create()) // 添加这行
+        .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    /**
-     * 城市数据接口服务
-     */
+    //Urban data interface services
     private val cityApiService: CityApiService by lazy {
         retrofit.create(CityApiService::class.java)
     }
 
-    /**
-     * 依赖注入实现
-     */
+    // Dependency Injection Implementation
     override val cityRepository: TravelRepository by lazy {
         NetworkCityRepository(cityApiService)
     }

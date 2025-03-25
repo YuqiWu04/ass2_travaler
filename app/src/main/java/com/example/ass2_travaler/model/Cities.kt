@@ -6,9 +6,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class City(
-    @SerialName("id") val id: Int,
-    @SerialName("title") val title: String,
-    @SerializedName("poster") // 与API返回字段名匹配
-    val imageUrl: String
+    @SerialName("id") val id: String ="",
+    @SerialName("title") val title: String="",
+    @SerialName("top_attractions") val top_attractions: String="",
+    @SerialName("optimal_budget_usd") val optimal_budget_usd: Int = 0,
+    @SerialName("rating") val rating: Int = 0,
+    @SerialName("best_season") val best_season: String="",
+    @SerializedName("poster") val imageUrl: List<String> = emptyList(),
 )
 
