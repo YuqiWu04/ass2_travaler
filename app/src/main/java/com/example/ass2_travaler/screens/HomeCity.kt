@@ -35,11 +35,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 
+
 import coil3.compose.AsyncImage
 import com.example.ass2_travaler.R
 import com.example.ass2_travaler.model.City
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.ass2_travaler.routes.CityScreen
 
 @SuppressLint("StateFlowValueCalledInComposition")
@@ -65,7 +67,7 @@ fun CityRecommend(
                         city = city,
                         isSelected = city.id == viewModel.selectedId.value,
                         onSelect = {
-                            navController.navigate("${CityScreen.Detail.name}/${city.id}")
+                            navController.navigate("${CityScreen.Detail.route}/${city.id}")
                         }
                     )
                 }
@@ -132,8 +134,8 @@ fun DashboardView(
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .fillMaxSize()
-                .height(800.dp)
+                .fillMaxWidth()
+                .height(400.dp)
         )
 
         Card(
@@ -142,7 +144,7 @@ fun DashboardView(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .heightIn(min = 550.dp)
+                .heightIn(min = 400.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -150,6 +152,20 @@ fun DashboardView(
                     .padding(16.dp)
                     .verticalScroll(rememberScrollState())
             ) {
+                Text(
+                    text = "Hi, Dear!!",
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                Text(
+                    text = "Your recent itinerary destination: ",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = Color.Gray,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
                 Text(
                     text = "Recommendation City:",
                     fontSize = 28.sp,
@@ -168,7 +184,7 @@ fun DashboardView(
 }
 
 @Composable
-fun HomeCity(navController: NavController, sharedViewModel: HomeCityViewModel) {
-    val viewModel: HomeCityViewModel = viewModel(factory = HomeCityViewModel.Factory)
+fun HomeCity(navController: NavHostController, viewModel: HomeCityViewModel) {
+
     DashboardView(navController = navController)
 }

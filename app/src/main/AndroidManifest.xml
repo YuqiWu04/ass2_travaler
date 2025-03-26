@@ -5,6 +5,7 @@
     <uses-feature android:name="android.hardware.vulkan.level" android:required="false"/>
     <uses-feature android:name="android.hardware.opengles.version" android:required="false"/>
     <application
+        android:enableOnBackInvokedCallback="true"
         android:name=".TravalerApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"

@@ -11,6 +11,7 @@ import com.example.ass2_travaler.TravalerApplication
 import com.example.ass2_travaler.data.TravelRepository
 import com.example.ass2_travaler.model.City
 
+
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,6 +29,8 @@ class HomeCityViewModel(private val cityRepository: TravelRepository) : ViewMode
     // Managing UI State with Sealed Classes
     private val _uiState = MutableStateFlow<CityUiState>(CityUiState.Loading)
     val uiState: StateFlow<CityUiState> = _uiState.asStateFlow()
+
+
 
     init {
         viewModelScope.launch {
