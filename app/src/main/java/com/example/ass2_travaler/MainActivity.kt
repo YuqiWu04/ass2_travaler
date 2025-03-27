@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
                     if (isInitialized.value) {
                         TravelApp()
                     } else {
-                        LoadingScreen()
+                        LoadingScreen()// Show a loading screen
                     }
                 }
             }
