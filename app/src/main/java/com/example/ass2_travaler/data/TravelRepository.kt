@@ -2,9 +2,10 @@ package com.example.ass2_travaler.data
 
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import com.example.ass2_travaler.model.City
 import com.example.ass2_travaler.network.CityApiService
-
+import kotlinx.coroutines.flow.Flow
 
 
 interface TravelRepository {
@@ -45,4 +46,15 @@ class NetworkCityRepository(
         return cities.find { it.id == cityId } // Use the correct ID field
     }
 
+}
+interface TravelPlanRepository {
+    fun getTravelPlans(): Flow<List<TravelPlan>>
+    suspend fun insertTravelPlan(plan: TravelPlan): Long
+    suspend fun updateTravelPlan(plan: TravelPlan): Int
+}
+
+class LocalTravelPlanRepository(private val dao: TravelPlanDao) : TravelPlanRepository {
+    override fun getTravelPlans() = dao.getAllTravelPlans()
+    override suspend fun insertTravelPlan(plan: TravelPlan) = dao.insertTravelPlan(plan)
+    override suspend fun updateTravelPlan(plan: TravelPlan) = dao.updateTravelPlan(plan)
 }

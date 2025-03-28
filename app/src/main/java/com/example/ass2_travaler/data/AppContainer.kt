@@ -1,6 +1,7 @@
 
 package com.example.ass2_travaler.data
 
+import android.content.Context
 import com.example.ass2_travaler.network.CityApiService
 
 import retrofit2.Retrofit
@@ -8,9 +9,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 interface AppContainer {
     val cityRepository: TravelRepository
+    val travelPlanRepository: TravelPlanRepository
 }
 
-class DefaultAppContainer : AppContainer {
+class DefaultAppContainer(context: Context) : AppContainer {
     private val baseUrl = "https://yuqiwu04.github.io/my_api_repo/"
 
     // Building Retrofit Instances Serially with Kotlin
@@ -27,5 +29,10 @@ class DefaultAppContainer : AppContainer {
     // Dependency Injection Implementation
     override val cityRepository: TravelRepository by lazy {
         NetworkCityRepository(cityApiService)
+    }
+    // TravelPlanRepository
+    private val travelPlanDatabase = TravelPlanDatabase.getDatabase(context)
+    override val travelPlanRepository: TravelPlanRepository by lazy {
+        LocalTravelPlanRepository(travelPlanDatabase.travelPlanDao())
     }
 }

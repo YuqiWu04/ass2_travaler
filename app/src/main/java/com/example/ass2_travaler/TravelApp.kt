@@ -20,7 +20,7 @@ import com.example.ass2_travaler.screens.BottomNavBar
 import com.example.ass2_travaler.screens.Budget
 import com.example.ass2_travaler.screens.DetailScreen
 import com.example.ass2_travaler.screens.HomeCity
-import com.example.ass2_travaler.screens.HomeCityViewModel
+import com.example.ass2_travaler.viewmodel.HomeCityViewModel
 import com.example.ass2_travaler.screens.TravelPlan
 
 @SuppressLint("UnrememberedMutableState")
@@ -66,7 +66,7 @@ fun TravelApp() {
                 DetailScreen(navController, viewModel)
             }
             composable(CityScreen.TravelPlan.route) {
-                TravelPlan(navController, viewModel)
+                TravelPlan(viewModel)
             }
             composable(CityScreen.Budget.route) {
                 Budget(navController, viewModel)
