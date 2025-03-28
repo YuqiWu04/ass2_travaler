@@ -17,6 +17,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.ass2_travaler.routes.CityScreen
+import com.example.ass2_travaler.viewmodel.HomeCityViewModel
 
 @Composable
 fun BottomNavBar(navController: NavHostController, viewModel: HomeCityViewModel) {

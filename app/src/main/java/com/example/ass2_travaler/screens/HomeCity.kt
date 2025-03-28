@@ -43,6 +43,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.ass2_travaler.routes.CityScreen
+import com.example.ass2_travaler.viewmodel.HomeCityViewModel
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -130,7 +131,7 @@ fun DashboardView(
 
     Box(modifier = modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(id = R.drawable.back),
+            painter = painterResource(id = R.drawable.back_p),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier

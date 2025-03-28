@@ -1,26 +1,23 @@
-package com.example.ass2_travaler.screens
+package com.example.ass2_travaler.viewmodel
 
-import SharedTravelData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.ass2_travaler.TravalerApplication
+import com.example.ass2_travaler.data.TravelPlan
+import com.example.ass2_travaler.data.TravelPlanRepository
 import com.example.ass2_travaler.data.TravelRepository
 import com.example.ass2_travaler.model.City
-
-
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-
 import kotlinx.coroutines.launch
 
-
-class HomeCityViewModel(private val cityRepository: TravelRepository) : ViewModel() {
+class HomeCityViewModel(private val cityRepository: TravelRepository,private val travelPlanRepository: TravelPlanRepository) : ViewModel() {
 
     // Managing Selected IDs with MutableStateFlow
     private val _selectedId = MutableStateFlow<String>("")
@@ -29,9 +26,19 @@ class HomeCityViewModel(private val cityRepository: TravelRepository) : ViewMode
     // Managing UI State with Sealed Classes
     private val _uiState = MutableStateFlow<CityUiState>(CityUiState.Loading)
     val uiState: StateFlow<CityUiState> = _uiState.asStateFlow()
+    val travelPlans = travelPlanRepository.getTravelPlans().asLiveData()
 
+    fun addPlan(plan: TravelPlan) {
+        viewModelScope.launch {
+            travelPlanRepository.insertTravelPlan(plan)
+        }
+    }
 
-
+    fun updatePlan(plan: TravelPlan) {
+        viewModelScope.launch {
+            travelPlanRepository.updateTravelPlan(plan)
+        }
+    }
     init {
         viewModelScope.launch {
             SharedTravelData.cities
@@ -69,6 +76,7 @@ class HomeCityViewModel(private val cityRepository: TravelRepository) : ViewMode
         }
     }
 
+
     sealed class CityUiState {
         object Loading : CityUiState()
         object Empty : CityUiState()
@@ -79,9 +87,11 @@ class HomeCityViewModel(private val cityRepository: TravelRepository) : ViewMode
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = (this[APPLICATION_KEY] as TravalerApplication)
+                val application =
+                    (this[ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY] as TravalerApplication)
                 HomeCityViewModel(
-                    cityRepository = application.container.cityRepository
+                    cityRepository = application.container.cityRepository,
+                    travelPlanRepository = application.container.travelPlanRepository
                 )
             }
         }
