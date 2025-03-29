@@ -29,7 +29,7 @@ fun BottomNavBar(navController: NavHostController, viewModel: HomeCityViewModel)
     }
     NavigationBar( modifier = Modifier.height(110.dp).fillMaxWidth()) {
         CityScreen.entries
-            .filter { it != CityScreen.Detail }
+            .filter { it in setOf(CityScreen.Listing, CityScreen.TravelPlan, CityScreen.Budget) }
             .forEach { screen ->
                 NavigationBarItem(
                     selected = currentRoute == screen.route,

@@ -39,6 +39,11 @@ class HomeCityViewModel(private val cityRepository: TravelRepository,private val
             travelPlanRepository.updateTravelPlan(plan)
         }
     }
+    fun deletePlan(plan: TravelPlan) {
+        viewModelScope.launch {
+            travelPlanRepository.deleteTravelPlan(plan)
+        }
+    }
     init {
         viewModelScope.launch {
             SharedTravelData.cities

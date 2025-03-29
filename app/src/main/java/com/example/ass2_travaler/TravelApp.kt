@@ -22,6 +22,7 @@ import com.example.ass2_travaler.screens.DetailScreen
 import com.example.ass2_travaler.screens.HomeCity
 import com.example.ass2_travaler.viewmodel.HomeCityViewModel
 import com.example.ass2_travaler.screens.TravelPlan
+import com.example.ass2_travaler.screens.TravelPlanForm
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
@@ -66,11 +67,31 @@ fun TravelApp() {
                 DetailScreen(navController, viewModel)
             }
             composable(CityScreen.TravelPlan.route) {
-                TravelPlan(viewModel)
+                TravelPlan(navController, viewModel) // 修正参数顺序
             }
+            composable(CityScreen.TravelPlanForm) {
+                TravelPlanForm(
+                    navController = navController,
+                    planToEdit = null, // 新增模式
+                    viewModel = viewModel
+                )
+            }
+            composable(
+                route = "${CityScreen.TravelPlanForm}/{planId}",
+                arguments = listOf(navArgument("planId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val planId = backStackEntry.arguments?.getString("planId")
+                val planToEdit = viewModel.travelPlans.value?.find { it.id == planId }
+                TravelPlanForm(
+                    navController = navController,
+                    planToEdit = planToEdit,
+                    viewModel = viewModel
+                )
+            }
+
             composable(CityScreen.Budget.route) {
                 Budget(navController, viewModel)
             }
         }
+        }
     }
-}

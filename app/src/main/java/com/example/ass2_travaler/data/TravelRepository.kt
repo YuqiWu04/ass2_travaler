@@ -51,10 +51,13 @@ interface TravelPlanRepository {
     fun getTravelPlans(): Flow<List<TravelPlan>>
     suspend fun insertTravelPlan(plan: TravelPlan): Long
     suspend fun updateTravelPlan(plan: TravelPlan): Int
+    suspend fun deleteTravelPlan(plan: TravelPlan): Int
 }
 
 class LocalTravelPlanRepository(private val dao: TravelPlanDao) : TravelPlanRepository {
     override fun getTravelPlans() = dao.getAllTravelPlans()
     override suspend fun insertTravelPlan(plan: TravelPlan) = dao.insertTravelPlan(plan)
     override suspend fun updateTravelPlan(plan: TravelPlan) = dao.updateTravelPlan(plan)
+    override suspend fun deleteTravelPlan(plan: TravelPlan) = dao.deleteTravelPlan(plan)
+
 }
