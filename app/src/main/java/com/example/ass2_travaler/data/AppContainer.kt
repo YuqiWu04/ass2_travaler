@@ -2,6 +2,7 @@
 package com.example.ass2_travaler.data
 
 import android.content.Context
+import androidx.room.Room
 import com.example.ass2_travaler.network.CityApiService
 
 import retrofit2.Retrofit
@@ -10,6 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 interface AppContainer {
     val cityRepository: TravelRepository
     val travelPlanRepository: TravelPlanRepository
+    val budgetRepository: BudgetRepository
 }
 
 class DefaultAppContainer(context: Context) : AppContainer {
@@ -35,4 +37,14 @@ class DefaultAppContainer(context: Context) : AppContainer {
     override val travelPlanRepository: TravelPlanRepository by lazy {
         LocalTravelPlanRepository(travelPlanDatabase.travelPlanDao())
     }
+    private val budgetDatabase = Room.databaseBuilder(
+        context,
+        BudgetDatabase::class.java, "budget.db"
+    ).build()
+
+    override val budgetRepository: BudgetRepository by lazy {
+        LocalBudgetRepository(budgetDatabase.dao())
+
+}
+
 }

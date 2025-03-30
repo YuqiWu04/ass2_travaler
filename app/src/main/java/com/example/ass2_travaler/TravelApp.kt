@@ -18,6 +18,7 @@ import androidx.navigation.navArgument
 import com.example.ass2_travaler.routes.CityScreen
 import com.example.ass2_travaler.screens.BottomNavBar
 import com.example.ass2_travaler.screens.Budget
+import com.example.ass2_travaler.screens.BudgetForm
 import com.example.ass2_travaler.screens.DetailScreen
 import com.example.ass2_travaler.screens.HomeCity
 import com.example.ass2_travaler.viewmodel.HomeCityViewModel
@@ -47,7 +48,8 @@ fun TravelApp() {
                     CityScreen.Listing.route,
                     CityScreen.TravelPlan.route,
                     CityScreen.Budget.route
-                )) {
+                )
+            ) {
                 BottomNavBar(navController, viewModel)
             }
         }
@@ -88,10 +90,28 @@ fun TravelApp() {
                     viewModel = viewModel
                 )
             }
-
             composable(CityScreen.Budget.route) {
-                Budget(navController, viewModel)
+                Budget(
+                    viewModel = viewModel,
+                    navController = navController
+                )
+            }
+            composable(
+                route = "${CityScreen.BudgetForm.route}/{itemId}",
+                arguments = listOf(navArgument("itemId") {
+                    type = NavType.LongType
+                    defaultValue = -1L
+                })
+            ) { backStackEntry ->
+                val itemId = backStackEntry.arguments?.getLong("itemId") ?: -1L
+                val itemToEdit = viewModel.items.value?.find { it.id == itemId }
+                Log.d("NAV_DEBUG", "Entering BudgetForm with id: $itemId")
+                BudgetForm(
+                    viewModel = viewModel,
+                    itemToEdit = if (itemId != -1L) itemToEdit else null,
+                    onComplete = { navController.popBackStack() }
+                )
             }
         }
-        }
     }
+}

@@ -61,3 +61,18 @@ class LocalTravelPlanRepository(private val dao: TravelPlanDao) : TravelPlanRepo
     override suspend fun deleteTravelPlan(plan: TravelPlan) = dao.deleteTravelPlan(plan)
 
 }
+interface BudgetRepository {
+    val totalSpending: Flow<Double>
+    fun getAll(): Flow<List<BudgetItem>>
+    suspend fun insert(item: BudgetItem): Long
+    suspend fun update(item: BudgetItem)
+    suspend fun delete(item: BudgetItem)
+}
+
+class LocalBudgetRepository(private val dao: BudgetDao) : BudgetRepository {
+    override val totalSpending = dao.getTotalSpending()
+    override fun getAll() = dao.getAll()
+    override suspend fun insert(item: BudgetItem) = dao.insert(item)
+    override suspend fun update(item: BudgetItem) = dao.update(item)
+    override suspend fun delete(item: BudgetItem) = dao.delete(item)
+}

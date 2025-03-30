@@ -1,5 +1,7 @@
 package com.example.ass2_travaler.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
@@ -7,6 +9,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.ass2_travaler.TravalerApplication
+import com.example.ass2_travaler.data.BudgetItem
+import com.example.ass2_travaler.data.BudgetRepository
 import com.example.ass2_travaler.data.TravelPlan
 import com.example.ass2_travaler.data.TravelPlanRepository
 import com.example.ass2_travaler.data.TravelRepository
@@ -17,7 +21,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
-class HomeCityViewModel(private val cityRepository: TravelRepository,private val travelPlanRepository: TravelPlanRepository) : ViewModel() {
+class HomeCityViewModel(private val cityRepository: TravelRepository,private val travelPlanRepository: TravelPlanRepository,private val budgetRepository: BudgetRepository) : ViewModel() {
 
     // Managing Selected IDs with MutableStateFlow
     private val _selectedId = MutableStateFlow<String>("")
@@ -28,6 +32,12 @@ class HomeCityViewModel(private val cityRepository: TravelRepository,private val
     val uiState: StateFlow<CityUiState> = _uiState.asStateFlow()
     val travelPlans = travelPlanRepository.getTravelPlans().asLiveData()
 
+    val items: LiveData<List<BudgetItem>> = budgetRepository.getAll().asLiveData()
+    val totalSpending = budgetRepository.totalSpending.asLiveData()
+    private val _budgetLimit = MutableLiveData(0.0)
+    private val _items = MutableLiveData<List<BudgetItem>>(emptyList())
+
+    val budgetLimit: LiveData<Double> = _budgetLimit
     fun addPlan(plan: TravelPlan) {
         viewModelScope.launch {
             travelPlanRepository.insertTravelPlan(plan)
@@ -55,11 +65,33 @@ class HomeCityViewModel(private val cityRepository: TravelRepository,private val
                     // Processing data in a collect lambda
                     handleCitySelection(cities, id)
                 }
+
         }
     }
 
     fun setCityId(cityId: String) {
         _selectedId.value = cityId
+    }
+
+    fun setBudgetLimit(limit: Double) {
+        _budgetLimit.value = limit
+    }
+
+    fun addItem(item: BudgetItem) = viewModelScope.launch {
+        budgetRepository.insert(item)
+    }
+
+    fun updateItem(updatedItem: BudgetItem) {
+        viewModelScope.launch {
+            budgetRepository.update(updatedItem)
+            _items.value = _items.value?.map { item ->
+                if (item.id == updatedItem.id) updatedItem else item
+            }
+        }
+    }
+
+    fun deleteItem(item: BudgetItem) = viewModelScope.launch {
+        budgetRepository.delete(item)
     }
 
     private fun handleCitySelection(cities: List<City>, id: String) {
@@ -96,7 +128,8 @@ class HomeCityViewModel(private val cityRepository: TravelRepository,private val
                     (this[ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY] as TravalerApplication)
                 HomeCityViewModel(
                     cityRepository = application.container.cityRepository,
-                    travelPlanRepository = application.container.travelPlanRepository
+                    travelPlanRepository = application.container.travelPlanRepository,
+                    budgetRepository = application.container.budgetRepository,
                 )
             }
         }

@@ -13,6 +13,7 @@ enum class CityScreen(val route: String, val icon: ImageVector) {
     Listing("listing", Icons.Default.Home),
     TravelPlan("travel_plan", Icons.Default.Place),
     Budget("budget", Icons.Default.AccountBox),
+    BudgetForm("budget_form", Icons.Default.Add),
     Detail("detail", Icons.Default.Info);
 //    TravelPlanForm("travel_plan/add", Icons.Default.Add) // 新增表单路由
     companion object {
