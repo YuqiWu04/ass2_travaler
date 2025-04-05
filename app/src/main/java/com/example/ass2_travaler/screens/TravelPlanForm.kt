@@ -1,5 +1,6 @@
 package com.example.ass2_travaler.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.ass2_travaler.viewmodel.HomeCityViewModel
-
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ass2_travaler.data.TravelPlan
 @Composable
@@ -25,6 +26,7 @@ fun TravelPlanForm(
     planToEdit: TravelPlan? = null,
     viewModel: HomeCityViewModel = viewModel(factory = HomeCityViewModel.Factory)
 ) {
+    val context = LocalContext.current
     var id by remember { mutableStateOf(planToEdit?.id ?: "") }
     var eventName by remember { mutableStateOf(planToEdit?.eventName ?: "") }
     var dateTimeStr by remember { mutableStateOf(planToEdit?.dateTime?.toString() ?: "") }
@@ -58,6 +60,11 @@ fun TravelPlanForm(
         )
 //
         Button(onClick = {
+            if (id.isBlank() || eventName.isBlank() || dateTimeStr.isBlank() || location.isBlank()) {
+                //avoid empty
+                Toast.makeText(context,"Please Enter your plan details" ,Toast.LENGTH_SHORT).show()
+                return@Button
+            }
             val dateTime = dateTimeStr.toLongOrNull() ?: System.currentTimeMillis()
             if (planToEdit != null) {
 

@@ -92,7 +92,11 @@ fun Budget(viewModel: HomeCityViewModel,navController: NavController ) {
 
 @Composable
 fun BudgetHeader(total: Double, limit: Double, onSetBudget: () -> Unit) {
-    val progress = (total / limit).toFloat().coerceIn(0f, 1f)
+    val progress = if (limit > 0 && !limit.isNaN()) {
+        (total / limit).toFloat().coerceIn(0f, 1f)
+    } else {
+        0f
+    }
 
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),

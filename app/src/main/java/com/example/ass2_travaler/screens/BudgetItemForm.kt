@@ -1,5 +1,7 @@
 package com.example.ass2_travaler.screens
 
+import android.R.attr.id
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -12,7 +14,7 @@ import androidx.compose.foundation.layout.Column
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material3.Text
 
 import androidx.compose.ui.Modifier
@@ -44,6 +46,7 @@ fun BudgetForm(
     itemToEdit: BudgetItem? = null,
     onComplete: () -> Unit
 ) {
+    val context = LocalContext.current
     var category by remember {
         mutableStateOf(itemToEdit?.category ?: "")
     }
@@ -77,6 +80,11 @@ fun BudgetForm(
 
         Button(
             onClick = {
+                if (category.isBlank() || amount.isBlank()) {
+                    //avoid empty
+                    Toast.makeText(context,"Please Enter your item details!!" ,Toast.LENGTH_SHORT).show()
+                    return@Button
+                }
                 val selectedDate = datePickerState.selectedDateMillis?.let {
                     Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
                 } ?: LocalDate.now()
