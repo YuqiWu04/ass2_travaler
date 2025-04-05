@@ -11,6 +11,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -27,7 +28,8 @@ fun BottomNavBar(navController: NavHostController, viewModel: HomeCityViewModel)
     CityScreen.entries.forEach { screen ->
         Log.d("NAV_DEBUG", "check route: ${screen.route}, result: ${currentRoute == screen.route}")
     }
-    NavigationBar( modifier = Modifier.height(110.dp).fillMaxWidth()) {
+    NavigationBar( modifier = Modifier.height(110.dp).fillMaxWidth(), containerColor = Color(0xFFDCEDC8),
+        contentColor = Color.White) {
         CityScreen.entries
             .filter { it in setOf(CityScreen.Listing, CityScreen.TravelPlan, CityScreen.Budget) }
             .forEach { screen ->
