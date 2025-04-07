@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
+
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -84,7 +84,7 @@ fun UserHeader(username: String, onAvatarClick: () -> Unit) {
             modifier = Modifier
                 .size(64.dp)
                 .clip(CircleShape)
-                // 点击头像时触发回调
+
                 .clickable { onAvatarClick() },
             contentScale = ContentScale.Crop
         )

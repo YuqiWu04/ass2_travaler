@@ -1,5 +1,5 @@
 package com.example.ass2_travaler.screens
-import androidx.compose.foundation.background
+
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.foundation.lazy.items
@@ -12,17 +12,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ThumbUp
+
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialogDefaults.containerColor
+
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 
 import androidx.compose.runtime.Composable
@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.ass2_travaler.componentTool.LikeIconButton
@@ -48,29 +49,28 @@ fun TravelPlanItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 4.dp),
+            .padding(horizontal = 8.dp, vertical = 8.dp),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)) {
-            // 第一行：日期与天气信息
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            // 第一行：日期、天气信息与点赞按钮
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "${plan.dateTime}  Weather: 25-31°C, Cloudy",
+                    text = "${plan.dateTime}   Weather: 25-31°C, Cloudy",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                LikeIconButton(
-                    onClick = {
-
-                    })
+                LikeIconButton(onClick = {  })
             }
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -80,6 +80,7 @@ fun TravelPlanItem(
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
             )
+
             Text(
                 text = "Event ID: ${plan.id}",
                 style = MaterialTheme.typography.bodySmall,
@@ -89,7 +90,7 @@ fun TravelPlanItem(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column {
                     Text(
@@ -108,9 +109,8 @@ fun TravelPlanItem(
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Medium
                     )
-
                     Text(
-                        text ="${plan.dateTime}",
+                        text = "${plan.dateTime}",
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -127,22 +127,87 @@ fun TravelPlanItem(
                 }
             }
             Spacer(modifier = Modifier.height(12.dp))
-
+            // 操作按钮区域
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
                 Button(
                     onClick = { onEdit(plan) },
-                    modifier = Modifier.padding(end = 8.dp)
+                    modifier = Modifier.padding(end = 8.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer
+                    )
                 ) {
                     Text("EDIT")
                 }
                 Button(
-                    onClick = onDelete
+                    onClick = onDelete,
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.errorContainer
+                    )
                 ) {
                     Text("DELETE")
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun TravelCount(
+    travelPlanCount: Int,
+    navController: NavController
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Card(
+            shape = RoundedCornerShape(16.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+            modifier = Modifier.weight(1f)
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Travel Plans:$travelPlanCount",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+//                Spacer(modifier = Modifier.height(4.dp))
+//                Text(
+//                    text = "$travelPlanCount",
+//                    style = MaterialTheme.typography.headlineMedium,
+//                    fontWeight = FontWeight.Bold,
+//                    color = MaterialTheme.colorScheme.onPrimaryContainer
+//                )
+            }
+        }
+        Card(
+            shape = RoundedCornerShape(16.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+            modifier = Modifier.weight(1f)
+        ) {
+            Button(
+                onClick = { navController.navigate(CityScreen.TravelPlanForm) },
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                ),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Add Plan")
             }
         }
     }
@@ -155,54 +220,46 @@ fun TravelPlan(
 ) {
     val travelPlans by viewModel.travelPlans.observeAsState(initial = emptyList())
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color(0xFFE5F6F5))
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = Color(0xFFE5F6F5) 
     ) {
-
-        Text(
-            text = "Your Travel Plans",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp),
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center
-        )
-
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxSize()
+                .padding(16.dp)
         ) {
-            Button(
-                onClick = {
-                    navController.navigate(CityScreen.TravelPlanForm)
-                }
+
+            Text(
+                text = "Your Travel Plans",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp),
+                textAlign = TextAlign.Center
+            )
+
+            TravelCount(
+                navController = navController,
+                travelPlanCount = travelPlans.size
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            // List part
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Text("Add Plan")
-            }
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-
-
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            items(travelPlans) { plan ->
-                TravelPlanItem(
-                    plan = plan,
-                    onEdit = { planToEdit ->
-                        navController.navigate("${CityScreen.TravelPlanForm}/${planToEdit.id}")
-                    },
-                    onDelete = { viewModel.deletePlan(plan) }
-                )
+                items(travelPlans) { plan ->
+                    TravelPlanItem(
+                        plan = plan,
+                        onEdit = { planToEdit ->
+                            navController.navigate("${CityScreen.TravelPlanForm}/${planToEdit.id}")
+                        },
+                        onDelete = { viewModel.deletePlan(plan) }
+                    )
+                }
             }
         }
     }

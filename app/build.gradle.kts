@@ -12,7 +12,11 @@ plugins {
 android {
     namespace = "com.example.ass2_travaler"
     compileSdk = 35
-
+    packaging {
+        resources {
+            excludes += "**/.DS_Store"
+        }
+    }
     defaultConfig {
         applicationId = "com.example.ass2_travaler"
         minSdk = 35
@@ -115,5 +119,7 @@ dependencies {
     // kotlin-kapt
     ksp("androidx.room:room-compiler:2.6.1")
     implementation("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.6.0")
+
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
 
 }

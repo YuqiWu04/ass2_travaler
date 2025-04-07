@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-
+import androidx.lifecycle.map
 class HomeCityViewModel(private val cityRepository: TravelRepository,private val travelPlanRepository: TravelPlanRepository,private val budgetRepository: BudgetRepository) : ViewModel() {
 
     // Managing Selected IDs with MutableStateFlow
@@ -38,6 +38,12 @@ class HomeCityViewModel(private val cityRepository: TravelRepository,private val
     private val _items = MutableLiveData<List<BudgetItem>>(emptyList())
 
     val budgetLimit: LiveData<Double> = _budgetLimit
+    //group calculate the total amount
+    val aggregatedBudgetData: LiveData<List<Pair<String, Double>>> = items.map { budgetItems ->
+        budgetItems.groupBy { it.category }
+            .map { (category, items) -> category to items.sumOf { it.amount } }
+            .sortedBy { it.first }
+    }
     fun addPlan(plan: TravelPlan) {
         viewModelScope.launch {
             travelPlanRepository.insertTravelPlan(plan)

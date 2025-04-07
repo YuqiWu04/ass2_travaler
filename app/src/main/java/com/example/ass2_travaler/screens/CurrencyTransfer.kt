@@ -1,5 +1,6 @@
 package com.example.ass2_travaler.screens
 
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -15,16 +16,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.size
+
 import androidx.compose.foundation.text.KeyboardOptions
 
 import androidx.compose.material.icons.filled.ArrowDropDown
 
 import androidx.compose.material.icons.filled.Star
+
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+
 
 import androidx.compose.ui.text.input.KeyboardType
 
@@ -60,7 +64,10 @@ fun CurrencyTransfer() {
             },
             label = { Text("Amount") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.weight(2f)
+            modifier = Modifier.weight(2f),
+//            colors = TextFieldDefaults.textFieldColors(
+//                containerColor = Color.Green
+//            )
         )
 
 
