@@ -21,7 +21,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import androidx.lifecycle.map
-class HomeCityViewModel(private val cityRepository: TravelRepository,private val travelPlanRepository: TravelPlanRepository,private val budgetRepository: BudgetRepository) : ViewModel() {
+//  if you want to text for unit test ,please use open
+//open
+class HomeCityViewModel(private val cityRepository: TravelRepository, private val travelPlanRepository: TravelPlanRepository, private val budgetRepository: BudgetRepository) : ViewModel() {
 
     // Managing Selected IDs with MutableStateFlow
     private val _selectedId = MutableStateFlow<String>("")
@@ -99,7 +101,7 @@ class HomeCityViewModel(private val cityRepository: TravelRepository,private val
     fun deleteItem(item: BudgetItem) = viewModelScope.launch {
         budgetRepository.delete(item)
     }
-
+//if you want to test for unit test ,please use protected
     private fun handleCitySelection(cities: List<City>, id: String) {
         when {
             // Data not yet loaded

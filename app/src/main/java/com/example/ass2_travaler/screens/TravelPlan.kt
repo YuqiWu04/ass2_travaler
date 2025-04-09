@@ -59,7 +59,7 @@ fun TravelPlanItem(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            // 第一行：日期、天气信息与点赞按钮
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
