@@ -28,7 +28,7 @@ fun BottomNavBar(navController: NavHostController, viewModel: HomeCityViewModel)
     CityScreen.entries.forEach { screen ->
         Log.d("NAV_DEBUG", "check route: ${screen.route}, result: ${currentRoute == screen.route}")
     }
-    NavigationBar( modifier = Modifier.height(110.dp).fillMaxWidth(), containerColor = Color(0xFFDCEDC8),
+    NavigationBar( modifier = Modifier.height(110.dp).fillMaxWidth(), containerColor = Color.Black,
         contentColor = Color.White) {
         CityScreen.entries
             .filter { it in setOf(CityScreen.Listing, CityScreen.TravelPlan, CityScreen.Budget) }
@@ -45,7 +45,11 @@ fun BottomNavBar(navController: NavHostController, viewModel: HomeCityViewModel)
                         }
                     },
                     icon = { Icon(screen.icon, contentDescription = null) },
-                    label = { Text(screen.route.replaceFirstChar { it.uppercase() }) }
+                    label = { Text(screen.route.replaceFirstChar { it.uppercase() }) },
+                    colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
+                        selectedTextColor = Color.White,    //
+                        unselectedTextColor = Color.White  //
+                    )
                 )
             }
     }

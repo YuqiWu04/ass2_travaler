@@ -73,13 +73,13 @@ fun Budget(viewModel: HomeCityViewModel, navController: NavController) {
         item {
             Surface(
                 modifier = Modifier.fillMaxWidth(),
-                color = Color(0xFFB2DFDC)
+                color = Color.White
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
                         "Budget Control",
                         style = MaterialTheme.typography.headlineSmall,
-                        color = MaterialTheme.colorScheme.primary,
+                        color = Color.Black,
                         modifier = Modifier.padding(vertical = 8.dp)
                     )
                     BudgetHeader(
@@ -91,7 +91,7 @@ fun Budget(viewModel: HomeCityViewModel, navController: NavController) {
                     Text(
                         "Currency Transfer",
                         style = MaterialTheme.typography.headlineSmall,
-                        color = MaterialTheme.colorScheme.primary,
+                        color = Color.Black,
                         modifier = Modifier.padding(vertical = 8.dp)
                     )
                     CurrencyTransfer()
@@ -105,7 +105,7 @@ fun Budget(viewModel: HomeCityViewModel, navController: NavController) {
                 color = Color.White
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    // 使用 ViewModel 提供的聚合数据绘制折线图
+
                     BudgetLineChart(
                         aggregatedData = aggregatedData,
                         modifier = Modifier
@@ -117,6 +117,7 @@ fun Budget(viewModel: HomeCityViewModel, navController: NavController) {
                         onClick = {
                             navController.navigate("${CityScreen.BudgetForm.route}/-1")
                         },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp)
                     ) {
@@ -148,11 +149,14 @@ fun Budget(viewModel: HomeCityViewModel, navController: NavController) {
 }
 @Composable
 fun BudgetHeader(total: Double, limit: Double, onSetBudget: () -> Unit) {
+    // When limit > 0 and is not NaN, progress is calculated based on total expenditure and limit
     val progress = if (limit > 0 && !limit.isNaN()) {
         (total / limit).toFloat().coerceIn(0f, 1f)
     } else {
         0f
     }
+
+    val isOverLimit = limit > 0 && total > limit
 
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -160,7 +164,20 @@ fun BudgetHeader(total: Double, limit: Double, onSetBudget: () -> Unit) {
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            BudgetProgressBar(progress = progress)
+
+            BudgetProgressBar(
+                progress = progress,
+                progressColor = if (isOverLimit) Color.Red else MaterialTheme.colorScheme.primary
+            )
+
+            if (isOverLimit) {
+                Text(
+                    text = "Budget limit exceeded!",
+                    color = Color.Red,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
             Spacer(modifier = Modifier.height(8.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -176,11 +193,9 @@ fun BudgetHeader(total: Double, limit: Double, onSetBudget: () -> Unit) {
                 Button(
                     onClick = onSetBudget,
                     shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.tertiaryContainer
-                    )
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                 ) {
-                    Text("Set Budget")
+                    Text("Set Budget Limitation")
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))
@@ -305,7 +320,11 @@ fun BudgetLimitDialog(
 }
 
 @Composable
-fun BudgetProgressBar(progress: Float) {
+fun BudgetProgressBar(
+    progress: Float,
+    progressColor: Color = Color.Black,
+    trackColor: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
+) {
     val animatedProgress by animateFloatAsState(
         targetValue = progress,
         animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec
@@ -316,8 +335,8 @@ fun BudgetProgressBar(progress: Float) {
             .fillMaxWidth()
             .height(20.dp)
             .clip(RoundedCornerShape(10.dp)),
-        color = MaterialTheme.colorScheme.primary,
-        trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
+        color = progressColor,
+        trackColor = trackColor
     )
 }
 
@@ -387,7 +406,7 @@ fun BudgetLineChart(
                     // drew the diagram
                     for (i in 0 until points.size - 1) {
                         drawLine(
-                            color = Color.Blue,
+                            color = Color.Black,
                             start = points[i],
                             end = points[i + 1],
                             strokeWidth = 4f

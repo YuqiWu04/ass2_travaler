@@ -28,6 +28,8 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.ui.graphics.Color
 
 
 import androidx.compose.ui.text.input.KeyboardType
@@ -65,9 +67,10 @@ fun CurrencyTransfer() {
             label = { Text("Amount") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.weight(2f),
-//            colors = TextFieldDefaults.textFieldColors(
-//                containerColor = Color.Green
-//            )
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White
+            )
         )
 
 

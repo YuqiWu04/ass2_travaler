@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,9 +20,12 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 
@@ -127,7 +131,7 @@ fun TravelPlanItem(
                 }
             }
             Spacer(modifier = Modifier.height(12.dp))
-            // 操作按钮区域
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
@@ -164,51 +168,48 @@ fun TravelCount(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+
         Card(
             shape = RoundedCornerShape(16.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-            modifier = Modifier.weight(1f)
+            colors = CardDefaults.cardColors(containerColor = Color.Black),
+            modifier = Modifier
+                .weight(0.7f)
+                .height(56.dp)
         ) {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
+                contentAlignment = Alignment.CenterStart
             ) {
                 Text(
-                    text = "Travel Plans:$travelPlanCount",
+                    text = "Travel Plans: $travelPlanCount",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onPrimaryContainer
                 )
-//                Spacer(modifier = Modifier.height(4.dp))
-//                Text(
-//                    text = "$travelPlanCount",
-//                    style = MaterialTheme.typography.headlineMedium,
-//                    fontWeight = FontWeight.Bold,
-//                    color = MaterialTheme.colorScheme.onPrimaryContainer
-//                )
             }
         }
-        Card(
-            shape = RoundedCornerShape(16.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-            modifier = Modifier.weight(1f)
+
+
+        Button(
+            onClick = { navController.navigate(CityScreen.TravelPlanForm) },
+            shape = RoundedCornerShape(40.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+            modifier = Modifier
+                .weight(0.3f)
+                .height(56.dp)  // 与左侧卡片高度一致
         ) {
-            Button(
-                onClick = { navController.navigate(CityScreen.TravelPlanForm) },
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer
-                ),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Add Plan")
-            }
+            Icon(
+                imageVector = Icons.Filled.Add,
+                contentDescription = "Add Plan",
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
         }
     }
 }
@@ -222,7 +223,7 @@ fun TravelPlan(
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = Color(0xFFE5F6F5) 
+        color = Color(0xFFF2F2F2)
     ) {
         Column(
             modifier = Modifier

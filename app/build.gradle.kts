@@ -128,5 +128,4 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.6.0")
 
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
-
 }
