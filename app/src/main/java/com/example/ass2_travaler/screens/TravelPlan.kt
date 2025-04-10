@@ -43,6 +43,9 @@ import com.example.ass2_travaler.componentTool.LikeIconButton
 import com.example.ass2_travaler.data.TravelPlan
 import com.example.ass2_travaler.routes.CityScreen
 import com.example.ass2_travaler.viewmodel.HomeCityViewModel
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Composable
 fun TravelPlanItem(
@@ -50,6 +53,11 @@ fun TravelPlanItem(
     onEdit: (TravelPlan) -> Unit,
     onDelete: () -> Unit
 ) {
+    // 定义日期格式化器
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+
+// 将时间戳转换成格式化后的日期字符串
+    val formattedDate = dateFormat.format(Date(plan.dateTime))
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -103,7 +111,7 @@ fun TravelPlanItem(
                         fontWeight = FontWeight.Medium
                     )
                     Text(
-                        text = "${plan.dateTime}",
+                        text = formattedDate,
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -114,7 +122,7 @@ fun TravelPlanItem(
                         fontWeight = FontWeight.Medium
                     )
                     Text(
-                        text = "${plan.dateTime}",
+                        text = formattedDate,
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }

@@ -1,14 +1,21 @@
 package com.example.ass2_travaler.screens
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -26,6 +33,11 @@ import com.example.ass2_travaler.viewmodel.HomeCityViewModel
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.ass2_travaler.data.TravelPlan
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TravelPlanForm(
@@ -36,9 +48,21 @@ fun TravelPlanForm(
     val context = LocalContext.current
     var id by remember { mutableStateOf(planToEdit?.id ?: "") }
     var eventName by remember { mutableStateOf(planToEdit?.eventName ?: "") }
-    var dateTimeStr by remember { mutableStateOf(planToEdit?.dateTime?.toString() ?: "") }
-    var location by remember { mutableStateOf(planToEdit?.location ?: "") }
 
+    var location by remember { mutableStateOf(planToEdit?.location ?: "") }
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+    var selectedDateTime by remember { mutableStateOf(planToEdit?.dateTime ?: System.currentTimeMillis()) }
+    // 将选中的日期时间格式化为字符串显示给用户
+    var dateTimeStr by remember { mutableStateOf(dateFormat.format(Date(selectedDateTime))) }
+
+    // 使用 Calendar 辅助处理日期与时间
+    val calendar = Calendar.getInstance().apply { timeInMillis = selectedDateTime }
+    fun onPickDateTime() {
+        showDateTimePicker(context, selectedDateTime) { newTime ->
+            selectedDateTime = newTime
+            dateTimeStr = dateFormat.format(Date(newTime))
+        }
+    }
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -74,9 +98,20 @@ fun TravelPlanForm(
 
             OutlinedTextField(
                 value = dateTimeStr,
-                onValueChange = { dateTimeStr = it },
+                onValueChange = { /*只允许通过对话框选择*/ },
                 label = { Text("Date Time") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onPickDateTime() },
+                readOnly = true,
+                trailingIcon = {
+                    IconButton(onClick = { onPickDateTime() }) {
+                        Icon(
+                            imageVector = androidx.compose.material.icons.Icons.Default.DateRange,
+                            contentDescription = "Select date/time"
+                        )
+                    }
+                }
             )
 
             OutlinedTextField(
@@ -92,7 +127,12 @@ fun TravelPlanForm(
                         Toast.makeText(context, "Please enter your plan details", Toast.LENGTH_SHORT).show()
                         return@Button
                     }
-                    val dateTime = dateTimeStr.toLongOrNull() ?: System.currentTimeMillis()
+                    val dateTime = try {
+                        dateFormat.parse(dateTimeStr)?.time ?: throw Exception("Parse error")
+                    } catch (e: Exception) {
+                        Toast.makeText(context, "Invalid date/time format. Please use yyyy-MM-dd HH:mm", Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
                     if (planToEdit != null) {
                         viewModel.updatePlan(
                             planToEdit.copy(
@@ -113,4 +153,35 @@ fun TravelPlanForm(
             }
         }
     }
+}
+fun showDateTimePicker(
+    context: Context,
+    initialTime: Long,
+    onDateTimeSelected: (Long) -> Unit
+) {
+    val calendar = Calendar.getInstance().apply { timeInMillis = initialTime }
+    DatePickerDialog(
+        context,
+        { _, year, month, dayOfMonth ->
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, month)
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            TimePickerDialog(
+                context,
+                { _, hourOfDay, minute ->
+                    calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                    calendar.set(Calendar.MINUTE, minute)
+                    calendar.set(Calendar.SECOND, 0)
+                    calendar.set(Calendar.MILLISECOND, 0)
+                    onDateTimeSelected(calendar.timeInMillis)
+                },
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+                true
+            ).show()
+        },
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH)
+    ).show()
 }
