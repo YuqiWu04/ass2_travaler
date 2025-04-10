@@ -191,7 +191,7 @@ fun TravelCount(
                 Text(
                     text = "Travel Plans: $travelPlanCount",
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    color =Color.White
                 )
             }
         }
@@ -203,7 +203,7 @@ fun TravelCount(
             colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
             modifier = Modifier
                 .weight(0.3f)
-                .height(56.dp)  // 与左侧卡片高度一致
+                .height(56.dp)
         ) {
             Icon(
                 imageVector = Icons.Filled.Add,

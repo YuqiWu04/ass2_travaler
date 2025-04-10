@@ -42,7 +42,7 @@ class HomeCityViewModel(private val cityRepository: TravelRepository, private va
     val budgetLimit: LiveData<Double> = _budgetLimit
     //group calculate the total amount
     val aggregatedBudgetData: LiveData<List<Pair<String, Double>>> = items.map { budgetItems ->
-        budgetItems.groupBy { it.category }
+        budgetItems.groupBy { it.createdAt }
             .map { (category, items) -> category to items.sumOf { it.amount } }
             .sortedBy { it.first }
     }

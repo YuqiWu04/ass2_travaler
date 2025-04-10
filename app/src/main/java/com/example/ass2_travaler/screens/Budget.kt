@@ -56,6 +56,7 @@ import com.example.ass2_travaler.componentTool.formatCurrency
 import com.example.ass2_travaler.data.BudgetItem
 import com.example.ass2_travaler.routes.CityScreen
 import com.example.ass2_travaler.viewmodel.HomeCityViewModel
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 
@@ -350,22 +351,39 @@ fun BudgetLineChart(
         return
     }
 
-    // The maximum amount is calculated to scale the ordinate
-    val maxAmount = aggregatedData.maxOf { it.second }
-    // Define a fixed distance between each data point
-    val pointSpacingDp = 120.dp
-    // Calculate the total width of the chart based on the amount of data (default spacing if there is only one data point)
-    val chartWidth = if (aggregatedData.size > 1) {
-        pointSpacingDp * (aggregatedData.size - 1) + 16.dp
-    } else {
-        pointSpacingDp
+
+    val sortedData = aggregatedData.mapNotNull { (dateStr, amount) ->
+        try {
+            LocalDate.parse(dateStr, DateTimeFormatter.ISO_LOCAL_DATE) to amount
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }.sortedBy { it.first }
+
+    if (sortedData.isEmpty()) {
+        Text("No valid data", modifier = modifier)
+        return
     }
 
-    val tickCount = 5
 
-    val tickValues = (0..tickCount).map { it * maxAmount / tickCount }
+    val fixedSpacingDp = 120.dp
 
-    Row(modifier = modifier) {
+    val chartWidthDp = if (sortedData.size > 1) {
+        fixedSpacingDp * (sortedData.size - 1) + 16.dp
+    } else {
+        fixedSpacingDp
+    }
+
+
+    val maxAmount = sortedData.maxOf { it.second }
+
+
+    val yTickCount = 5
+    val yTickValues = (0..yTickCount).map { it * maxAmount / yTickCount }
+
+
+    Row(modifier = modifier.fillMaxWidth()) {
 
         Column(
             modifier = Modifier
@@ -373,7 +391,7 @@ fun BudgetLineChart(
                 .fillMaxHeight(),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            tickValues.reversed().forEach { tick ->
+            yTickValues.reversed().forEach { tick ->
                 Text(
                     text = tick.toInt().toString(),
                     style = MaterialTheme.typography.labelSmall,
@@ -382,59 +400,58 @@ fun BudgetLineChart(
             }
         }
 
-        Box(
+
+        Column(
             modifier = Modifier
                 .horizontalScroll(rememberScrollState())
-                .height(200.dp)
         ) {
 
-            Column {
+            Canvas(modifier = Modifier
+                .width(chartWidthDp)
+                .height(160.dp)
+            ) {
+                val canvasWidth = size.width
+                val canvasHeight = size.height
 
-                Canvas(modifier = Modifier.width(chartWidth).height(160.dp)) {
-                    val canvasWidth = size.width
-                    val canvasHeight = size.height
 
-                    // Calculate the X-coordinate of each data point: divide evenly across the entire chart width
-                    val points = aggregatedData.mapIndexed { index, pair ->
-                        val (_, totalAmount) = pair
-                        // The x coordinate is calculated in terms of index * pointSpacing
-                        val x = index * (canvasWidth / (aggregatedData.size - 1))
-                        val y = canvasHeight - (totalAmount / maxAmount * canvasHeight).toFloat()
-                        Offset(x, y)
-                    }
-
-                    // drew the diagram
-                    for (i in 0 until points.size - 1) {
-                        drawLine(
-                            color = Color.Black,
-                            start = points[i],
-                            end = points[i + 1],
-                            strokeWidth = 4f
-                        )
-                    }
-
-                    points.forEach { point ->
-                        drawCircle(
-                            color = Color.Red,
-                            radius = 6f,
-                            center = point
-                        )
-                    }
+                val points = sortedData.mapIndexed { index, (date, amount) ->
+                    val x = index * fixedSpacingDp.toPx()
+                    val y = canvasHeight - (amount / maxAmount * canvasHeight)
+                    Offset(x.toFloat(), y.toFloat())
                 }
 
-                Row(
-                    modifier = Modifier
-                        .width(chartWidth)
-                        .padding(horizontal = 4.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    aggregatedData.forEach { (category, _) ->
-                        Text(
-                            text = category,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = Color.Black
-                        )
-                    }
+
+                for (i in 0 until points.size - 1) {
+                    drawLine(
+                        color = Color.Blue,
+                        start = points[i],
+                        end = points[i + 1],
+                        strokeWidth = 4f
+                    )
+                }
+
+                points.forEach { point ->
+                    drawCircle(
+                        color = Color.Red,
+                        radius = 6f,
+                        center = point
+                    )
+                }
+            }
+
+
+            Row(
+                modifier = Modifier
+                    .width(chartWidthDp)
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                sortedData.forEach { (date, _) ->
+                    Text(
+                        text = date.format(DateTimeFormatter.ofPattern("MM/dd")),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Color.Black
+                    )
                 }
             }
         }
