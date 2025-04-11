@@ -16,7 +16,7 @@ enum class CityScreen(val route: String, val icon: ImageVector) {
     BudgetForm("budget_form", Icons.Default.Add),
     Login("login", Icons.Default.Home),
     Detail("detail", Icons.Default.Info);
-//    TravelPlanForm("travel_plan/add", Icons.Default.Add) // 新增表单路由
+//    TravelPlanForm("travel_plan/add", Icons.Default.Add)
     companion object {
         const val TravelPlanForm = "travel_plan_form"
     }

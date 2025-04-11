@@ -46,7 +46,7 @@ fun LoginScreen(navController: NavController, onLoginSuccess: (String) -> Unit) 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black) // 黑色背景
+            .background(Color.Black)
     ) {
 
         Column(
@@ -131,7 +131,7 @@ fun LoginScreen(navController: NavController, onLoginSuccess: (String) -> Unit) 
                     .height(56.dp),
                 shape = androidx.compose.foundation.shape.RoundedCornerShape(24.dp),
                 colors = androidx.compose.material3.ButtonDefaults.buttonColors(
-                    containerColor = Color.White // 白色按钮
+                    containerColor = Color.White
                 )
             ) {
                 Text(

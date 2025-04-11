@@ -52,10 +52,10 @@ fun TravelPlanForm(
     var location by remember { mutableStateOf(planToEdit?.location ?: "") }
     val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
     var selectedDateTime by remember { mutableStateOf(planToEdit?.dateTime ?: System.currentTimeMillis()) }
-    // 将选中的日期时间格式化为字符串显示给用户
+
     var dateTimeStr by remember { mutableStateOf(dateFormat.format(Date(selectedDateTime))) }
 
-    // 使用 Calendar 辅助处理日期与时间
+
     val calendar = Calendar.getInstance().apply { timeInMillis = selectedDateTime }
     fun onPickDateTime() {
         showDateTimePicker(context, selectedDateTime) { newTime ->
@@ -98,7 +98,7 @@ fun TravelPlanForm(
 
             OutlinedTextField(
                 value = dateTimeStr,
-                onValueChange = { /*只允许通过对话框选择*/ },
+                onValueChange = {  },
                 label = { Text("Date Time") },
                 modifier = Modifier
                     .fillMaxWidth()

@@ -500,7 +500,7 @@ fun DashboardView(
 
     Surface(
         modifier = modifier.fillMaxSize(),
-        color = Color(0xFFF2F2F2) // 整体屏幕背景颜色
+        color = Color(0xFFF2F2F2)
     ) {
         Column(
             modifier = Modifier

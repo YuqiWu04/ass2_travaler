@@ -53,10 +53,10 @@ fun TravelPlanItem(
     onEdit: (TravelPlan) -> Unit,
     onDelete: () -> Unit
 ) {
-    // 定义日期格式化器
+
     val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
 
-// 将时间戳转换成格式化后的日期字符串
+
     val formattedDate = dateFormat.format(Date(plan.dateTime))
     Card(
         modifier = Modifier
