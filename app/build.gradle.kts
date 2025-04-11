@@ -87,13 +87,13 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    // JUnit 4 测试库
+    // JUnit 4
     testImplementation ("junit:junit:4.13.2")
 
-    // AndroidX Core Testing（包含 InstantTaskExecutorRule 等工具）
+    // AndroidX Core Testing
     testImplementation ("androidx.arch.core:core-testing:2.1.0")
 
-    // Kotlin 协程测试库（如果用到了协程相关测试）
+    // Kotlin
     testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.1")
     // ===== Kotlinx Serialization =====
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.0")
@@ -103,7 +103,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     // Gson transfer
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    // Kotlinx Serialization 转换器（配合 Kotlinx Serialization 使用）
+    // Kotlinx Serialization
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
 
     // ===== Coil  =====
